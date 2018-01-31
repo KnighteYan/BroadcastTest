@@ -37,12 +37,12 @@ public class LoginActivity extends BaseActivity {
 
     boolean isRemember = pref.getBoolean("remember_password", false);
     if (isRemember) {
-      String account = pref.getString("account", "");
       String password = pref.getString("password", "");
-      accountEdit.setText(account);
       passwordEdit.setText(password);
       rememberPass.setChecked(true);
     }
+    String account = pref.getString("account", "");
+    accountEdit.setText(account);
 
     login.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -52,11 +52,12 @@ public class LoginActivity extends BaseActivity {
           editor = pref.edit();
           if (rememberPass.isChecked()) {
             editor.putBoolean("remember_password", true);
-            editor.putString("account", account);
             editor.putString("password", password);
           } else {
-            editor.clear();
+            editor.putBoolean("remember_password", false);
+            editor.putString("password", "");
           }
+          editor.putString("account", account);
           editor.apply();
           Intent intent = new Intent(LoginActivity.this, MainActivity.class);
           startActivity(intent);
